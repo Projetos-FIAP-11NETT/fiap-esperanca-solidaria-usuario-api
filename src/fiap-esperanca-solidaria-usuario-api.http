@@ -1,0 +1,6 @@
+@fiap_esperanca_solidaria_usuario_api_HostAddress = http://localhost:5043
+
+GET {{fiap_esperanca_solidaria_usuario_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

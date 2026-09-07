@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Anticorruption/">
+    <Project Path="../fiap-esperanca-solidaria-usuario-auth/FiapEsperancaSolidaria.Usuario.Auth.csproj" Id="f63585be-1416-40cf-bbb7-86483ecaa800" />
+  </Folder>
+  <Project Path="../fiap-esperanca-solidaria-application/FiapEsperancaSolidaria.Usuario.Application.csproj" Id="c5dcf89b-063b-40c1-8db9-8639fe12f1d0" />
+  <Project Path="../fiap-esperanca-solidaria-usuario-contract/FiapEsperancaSolidaria.Usuario.Contract.csproj" Id="7202cc89-7251-499f-a5b0-045203b13d17" />
+  <Project Path="../fiap-esperanca-solidaria-usuario-domain/FiapEsperancaSolidaria.Usuario.Domain.csproj" Id="df051f3c-650e-478d-8a64-20f2522c25c0" />
+  <Project Path="../fiap-esperanca-solidaria-usuario-infrastructure/FiapEsperancaSolidaria.Usuario.Infrastructure.csproj" Id="d322e613-a52b-48f1-859d-ebfa2b6a7bee" />
+  <Project Path="../fiap-esperanca-solidaria-usuario-observability/FiapEsperancaSolidaria.Usuario.Observability.csproj" Id="56016c37-8a80-48e2-a290-81fb5401f427" />
+  <Project Path="../fiap-esperanca-solidaria-usuario-shared/FiapEsperancaSolidaria.Usuario.Shared.csproj" Id="c5ef30dc-f90a-4702-814a-5ae96e68595c" />
+  <Project Path="../FiapEsperancaSolidaria.Usuario.Queue/FiapEsperancaSolidaria.Usuario.Queue.csproj" Id="e993f667-9ea5-400d-83d8-dc3f20c3f3b9" />
+  <Project Path="FiapEsperancaSolidaria.Usuario.Api.csproj" />
+</Solution>
