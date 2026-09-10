@@ -1,4 +1,5 @@
 ﻿using FiapEsperancaSolidaria.Usuario.Constraint;
+using Serilog.Context;
 using System.Diagnostics;
 
 namespace FiapEsperancaSolidaria.Usuario.Api.Middlewares;
@@ -9,7 +10,11 @@ public sealed class RequestResponseLoggingMiddleware(RequestDelegate _next, ILog
     private const string MessageResponse = "[user-service] CorrelationId: {CorrelationId} | Final da Requisicao {Method} {Path} | StatusCode: {StatusCode} {Elapsed}ms";
 
 
-    public async Task InvokeAsync(HttpContext context, IObservabilityService observabilityService)
+    public async Task InvokeAsync
+            (
+                HttpContext context//, 
+                //IObservabilityService observabilityService
+            )
     {
         var correlationId = GetOrCreateCorrelationId(context);
 
@@ -28,7 +33,7 @@ public sealed class RequestResponseLoggingMiddleware(RequestDelegate _next, ILog
 
             using (LogContext.PushProperty("CorrelationId", correlationId))
             {
-                observabilityService.AddCustomAttribute("CorrelationId", correlationId);
+                //observabilityService.AddCustomAttribute("CorrelationId", correlationId);
                 _logger.LogInformation(MessageRequest, correlationId, context.Request.Method, context.Request.Path);
 
                 await _next(context);

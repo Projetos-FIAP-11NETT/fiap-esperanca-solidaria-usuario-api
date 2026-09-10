@@ -1,4 +1,9 @@
-﻿using MediatR;
+﻿using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.AuthUser;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.CreateUser;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.LogoutSession;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.MakeGestorONG;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Queries.GetSession;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,7 +57,7 @@ public class UserController(IMediator mediator) : ControllerBase
 
     [HttpPut("MakeAdmin")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> MakeAdminAsync([FromBody] MakeAdminCommand command)
+    public async Task<IActionResult> MakeAdminAsync([FromBody] MakeGestorONGCommand command)
     {
         var result = await mediator.Send(command);
 
