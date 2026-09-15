@@ -19,7 +19,7 @@ public static class ApiConfig
 
     public static void UseApiConfig(this WebApplication app)
     {
-        app.UseMiddleware<ObservabilityMiddleware>();
+        //app.UseMiddleware<ObservabilityMiddleware>();
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseMiddleware<RequestResponseLoggingMiddleware>();
     }

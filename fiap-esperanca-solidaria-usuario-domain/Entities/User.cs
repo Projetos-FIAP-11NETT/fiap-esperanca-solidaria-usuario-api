@@ -9,14 +9,15 @@ public class User
     public Guid Id { get; private set; }
     public string Name { get; private set; }
     public string Email { get; private set; }
+    public string CPF { get; private set; }
+    [NotMapped]
+    public string Password { get; private set; }
+    public string Image { get; private set; }
+
     public string FirebaseUserId { get; private set; }
 
     private readonly List<Role> _roles = [];
     public IReadOnlyCollection<Role> Roles => _roles;
-
-    [NotMapped]
-    public string Password { get; private set; }
-
     private User() { }
 
 
@@ -26,7 +27,6 @@ public class User
         Name = name;
         Email = email;
         Password = password;
-
         AddRole(role);
         Validate();
     }

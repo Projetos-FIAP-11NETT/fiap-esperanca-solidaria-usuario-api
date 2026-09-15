@@ -13,10 +13,10 @@ public static class FirebaseConfig
     {
         var firebaseOptions = configuration.GetSection("Firebase").Get<FirebaseOptions>();
 
-        if (firebaseOptions == null || string.IsNullOrWhiteSpace(firebaseOptions.CredencialJson))
+        if (firebaseOptions == null || string.IsNullOrWhiteSpace(firebaseOptions.CredentialJson))
             throw new InvalidOperationException("Firebase credential json não configurado.");
 
-        var credential = CredentialFactory.FromJson<ServiceAccountCredential>(firebaseOptions.CredencialJson).ToGoogleCredential();
+        var credential = CredentialFactory.FromJson<ServiceAccountCredential>(firebaseOptions.CredentialJson).ToGoogleCredential();
 
         if (FirebaseApp.DefaultInstance == null)
         {

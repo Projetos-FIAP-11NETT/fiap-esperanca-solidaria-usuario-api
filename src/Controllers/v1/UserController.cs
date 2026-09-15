@@ -55,8 +55,8 @@ public class UserController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
-    [HttpPut("MakeAdmin")]
-    [Authorize(Roles = "Admin")]
+    [HttpPut("MakeGestorONG")]
+    [Authorize(Roles = "GestorONG")]
     public async Task<IActionResult> MakeAdminAsync([FromBody] MakeGestorONGCommand command)
     {
         var result = await mediator.Send(command);
