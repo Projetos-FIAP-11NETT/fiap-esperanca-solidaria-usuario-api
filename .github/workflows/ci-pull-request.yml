@@ -3,7 +3,7 @@ name: CI - Pull Request Validation
 on:
   pull_request:
     branches:
-      - Development
+      - develop
       - main
     types:
       - opened # Quando o PR é criado
