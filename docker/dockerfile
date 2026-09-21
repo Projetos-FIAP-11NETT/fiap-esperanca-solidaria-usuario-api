@@ -1,0 +1,55 @@
+# Passo 1: Restore (copia apenas os .csproj para aproveitar cache de camadas)
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS restore
+WORKDIR /src
+
+COPY ./src/fiap-esperanca-solidaria-usuario-api.slnx ./src/
+
+COPY ./src/FiapEsperancaSolidaria.Usuario.Api.csproj ./src/
+COPY ./fiap-esperanca-solidaria-application/FiapEsperancaSolidaria.Usuario.Application.csproj ./fiap-esperanca-solidaria-application/
+COPY ./fiap-esperanca-solidaria-usuario-contract/FiapEsperancaSolidaria.Usuario.Contract.csproj ./fiap-esperanca-solidaria-usuario-contract/
+COPY ./fiap-esperanca-solidaria-usuario-domain/FiapEsperancaSolidaria.Usuario.Domain.csproj ./fiap-esperanca-solidaria-usuario-domain/
+COPY ./fiap-esperanca-solidaria-usuario-infrastructure/FiapEsperancaSolidaria.Usuario.Infrastructure.csproj ./fiap-esperanca-solidaria-usuario-infrastructure/
+COPY ./fiap-esperanca-solidaria-usuario-observability/FiapEsperancaSolidaria.Usuario.Observability.csproj ./fiap-esperanca-solidaria-usuario-observability/
+COPY ./fiap-esperanca-solidaria-usuario-shared/FiapEsperancaSolidaria.Usuario.Shared.csproj ./fiap-esperanca-solidaria-usuario-shared/
+COPY ./fiap-esperanca-solidaria-usuario-auth/FiapEsperancaSolidaria.Usuario.Auth.csproj ./fiap-esperanca-solidaria-usuario-auth/
+COPY ./FiapEsperancaSolidaria.Usuario.Queue/FiapEsperancaSolidaria.Usuario.Queue.csproj ./FiapEsperancaSolidaria.Usuario.Queue/
+
+RUN dotnet restore ./src/fiap-esperanca-solidaria-usuario-api.slnx
+
+# Passo 2: Build (copia o restante do código e compila, reaproveitando o cache do restore)
+FROM restore AS build
+WORKDIR /src
+
+COPY . .
+
+RUN dotnet build ./src/fiap-esperanca-solidaria-usuario-api.slnx \
+    -c Release \
+    --no-restore
+
+# Passo 3: Test (roda os testes unitários como parte do build da imagem)
+FROM build AS test
+RUN dotnet test FiapEsperancaSolidaria.Usuario.slnx \
+    -c Release \
+    --no-build \
+    --verbosity normal
+
+# Passo 4: Publish (gera os artefatos de publicação)
+FROM build AS publish
+RUN dotnet publish ./src/FiapEsperancaSolidaria.Usuario.Api.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-build
+
+# Passo 5: Runtime (imagem final, só com os artefatos publicados)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "FiapEsperancaSolidaria.Usuario.Api.dll"]
+
+# docker build -f docker/Dockerfile -t esperanca-solidaria/usuario-api:latest .
+# docker run -d -p 8080:8080 --name usuario-api esperanca-solidaria/usuario-api:latest
