@@ -55,7 +55,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           docker build \
-            -f dockerfile/Dockerfile \
+            -f docker/dockerfile \
             -t $DOCKERHUB_USERNAME/$DOCKERHUB_REPOSITORY:$IMAGE_TAG \
             -t $DOCKERHUB_USERNAME/$DOCKERHUB_REPOSITORY:latest \
             .
