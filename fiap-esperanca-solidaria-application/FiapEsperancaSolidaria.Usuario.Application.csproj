@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+	<PackageReference Include="FluentValidation" Version="12.1.1" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+	<PackageReference Include="MediatR" Version="14.0.0" />
+	<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+	<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+	<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fiap-esperanca-solidaria-usuario-auth\FiapEsperancaSolidaria.Usuario.Auth.csproj" />
+    <ProjectReference Include="..\fiap-esperanca-solidaria-usuario-domain\FiapEsperancaSolidaria.Usuario.Domain.csproj" />
+    <ProjectReference Include="..\fiap-esperanca-solidaria-usuario-observability\FiapEsperancaSolidaria.Usuario.Observability.csproj" />
+    <ProjectReference Include="..\fiap-esperanca-solidaria-usuario-shared\FiapEsperancaSolidaria.Usuario.Shared.csproj" />
+    <ProjectReference Include="..\FiapEsperancaSolidaria.Usuario.Queue\FiapEsperancaSolidaria.Usuario.Queue.csproj" />
+  </ItemGroup>
+</Project>
