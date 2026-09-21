@@ -36,6 +36,11 @@ var app = builder.Build();
 
 app.UseApiConfig();
 
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.MapOpenApiConfiguration();
@@ -43,11 +48,5 @@ app.MapOpenApiConfiguration();
 app.MapHealthCheckEndpoints();
 
 app.ApplyMigrations();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.Run();

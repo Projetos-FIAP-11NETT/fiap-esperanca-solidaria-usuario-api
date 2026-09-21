@@ -11,6 +11,11 @@ public static class FirebaseConfig
 {
     public static void AddFirebase(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<FirebaseOptions>(options =>
+        {
+            configuration.GetSection("Firebase").Bind(options);
+        });
+
         var firebaseOptions = configuration.GetSection("Firebase").Get<FirebaseOptions>();
 
         if (firebaseOptions == null || string.IsNullOrWhiteSpace(firebaseOptions.CredentialJson))

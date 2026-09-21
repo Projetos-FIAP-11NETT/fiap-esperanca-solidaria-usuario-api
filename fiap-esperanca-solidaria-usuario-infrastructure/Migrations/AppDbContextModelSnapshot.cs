@@ -20,6 +20,8 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.HasDefaultSchema("identity");
+
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("FiapEsperancaSolidaria.Usuario.Domain.Entities.Role", b =>
@@ -37,7 +39,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role", "identity");
 
                     b.HasData(
                         new
@@ -60,7 +62,8 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
 
                     b.Property<string>("CPF")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(11)
+                        .HasColumnType("char(11)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -73,7 +76,6 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                         .HasColumnType("character varying(30)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -83,7 +85,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User", "identity");
                 });
 
             modelBuilder.Entity("UserRoles", b =>
@@ -98,7 +100,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", "identity");
                 });
 
             modelBuilder.Entity("UserRoles", b =>

@@ -25,11 +25,11 @@ public class CreateUserCommandHandler
         if (emailAlreadyExists)
             throw new BusinessException("Esse e-mail já está cadastrado");
 
-        var role = await roleRepository.FindUserRoleAsync();
+        var role = await roleRepository.FindDoadorRoleAsync();
         if (role is null)
             throw new NotFoundException("Perfil de usuário não encontrado");
 
-        var user = new User(command.Name, command.Email, command.Password, role);
+        var user = new User(command.Name, command.Email, command.Password, command.Cpf, command.Image, role);
 
         var firebaseUserId = await CreateUserInFirebase(user);
         if (string.IsNullOrEmpty(firebaseUserId))
@@ -40,17 +40,17 @@ public class CreateUserCommandHandler
 
         var result = await userRepository.SaveChangesAsync(cancellationToken);
 
-        if (result)
-        {
-            try
-            {
-                await emailNotificationPublisher.PublishAsync(user.Email, "Bem-vindo ao FiapCloudGames!", $"Olá {user.Name}, bem-vindo ao FiapCloudGames😎! Acesse a nossa biblioteca com os nossos novos jogos de sucesso!!");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao publicar evento de usuário criado para o usuário {UserId}", user.Id);
-            }
-        }
+        //if (result)
+        //{
+        //    try
+        //    {
+        //        await emailNotificationPublisher.PublishAsync(user.Email, "Bem-vindo ao FiapCloudGames!", $"Olá {user.Name}, bem-vindo ao FiapCloudGames😎! Acesse a nossa biblioteca com os nossos novos jogos de sucesso!!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError(ex, "Erro ao publicar evento de usuário criado para o usuário {UserId}", user.Id);
+        //    }
+        //}
         return result;
     }
 

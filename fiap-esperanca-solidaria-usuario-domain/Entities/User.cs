@@ -12,8 +12,7 @@ public class User
     public string CPF { get; private set; }
     [NotMapped]
     public string Password { get; private set; }
-    public string Image { get; private set; }
-
+    public string? Image { get; private set; }
     public string FirebaseUserId { get; private set; }
 
     private readonly List<Role> _roles = [];
@@ -21,12 +20,14 @@ public class User
     private User() { }
 
 
-    public User(string name, string email, string password, Role role)
+    public User(string name, string email, string password, string cpf, string image, Role role)
     {
         Id = Guid.NewGuid();
         Name = name;
         Email = email;
         Password = password;
+        CPF = cpf;
+        Image = image;
         AddRole(role);
         Validate();
     }
@@ -62,6 +63,7 @@ public class User
     {
         ValidateName();
         ValidateEmail();
+        ValidateCPF();
         ValidatePassword();
     }
 
@@ -91,6 +93,18 @@ public class User
 
         if (!isValid)
             throw new DomainException("E-mail inválido. Formato incorreto.");
+    }
+
+    private void ValidateCPF()
+    {
+        if (string.IsNullOrWhiteSpace(CPF))
+            throw new DomainException("CPF inválido. Não pode ser vazio.");
+
+        if (CPF.Length != 11)
+            throw new DomainException("CPF inválido. Deve conter 11 caracteres.");
+
+        if (!CPF.All(char.IsDigit))
+            throw new DomainException("CPF inválido. Deve conter apenas números.");
     }
 
     private void ValidatePassword()

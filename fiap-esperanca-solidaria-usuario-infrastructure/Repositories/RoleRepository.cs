@@ -11,7 +11,7 @@ public class RoleRepository(AppDbContext dataContext) : Repository<Role>(dataCon
 {
     private readonly AppDbContext _dataContext = dataContext;
 
-    public async Task<Role> FindUserRoleAsync()
+    public async Task<Role> FindDoadorRoleAsync()
     {
         var role = await _dataContext.Roles
             .FirstOrDefaultAsync(r => r.Name == "Doador");
@@ -19,7 +19,7 @@ public class RoleRepository(AppDbContext dataContext) : Repository<Role>(dataCon
         return role;
     }
 
-    public async Task<Role> FindAdminRoleAsync()
+    public async Task<Role> FindGestorRoleAsync()
     {
         var role = await _dataContext.Roles
             .FirstOrDefaultAsync(r => r.Name == "GestorONG");

@@ -85,6 +85,9 @@ public class FirebaseService(
             content
         );
 
+        var errorJson = await response.Content.ReadAsStringAsync();
+
+
         if (!response.IsSuccessStatusCode)
             throw new UnauthorizedAccessException("Usuário ou senha inválidos");
 

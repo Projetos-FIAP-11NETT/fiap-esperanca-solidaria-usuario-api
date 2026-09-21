@@ -5,7 +5,7 @@ namespace FiapEsperancaSolidaria.Usuario.Domain.Contracts.Repositories;
 
 public interface IRoleRepository : IRepository<Role>
 {
-    Task<Role> FindUserRoleAsync();
+    Task<Role> FindDoadorRoleAsync();
 
-    Task<Role> FindAdminRoleAsync();
+    Task<Role> FindGestorRoleAsync();
 }

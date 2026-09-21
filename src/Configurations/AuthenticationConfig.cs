@@ -16,17 +16,22 @@ public static class AuthenticationConfig
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => {
+            .AddJwtBearer(options =>
+            {
                 options.Authority = $"https://securetoken.google.com/{firebaseOptions.ProjectId}";
+                options.MapInboundClaims = false;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = $"https://securetoken.google.com/{firebaseOptions.ProjectId}",
                     ValidateAudience = true,
                     ValidAudience = firebaseOptions.ProjectId,
-                    ValidateLifetime = true
+                    ValidateLifetime = true,
+                    RoleClaimType = "roles",
+                    NameClaimType = "email"
                 };
-        });
+            });
         services.AddAuthorization();
     }
 }

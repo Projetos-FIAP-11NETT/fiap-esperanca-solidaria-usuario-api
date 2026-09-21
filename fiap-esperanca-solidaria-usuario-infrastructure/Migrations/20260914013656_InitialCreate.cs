@@ -18,7 +18,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 name: "identity");
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "Role",
                 schema: "identity",
                 columns: table => new
                 {
@@ -28,7 +28,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,8 +39,8 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    CPF = table.Column<string>(type: "text", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: false),
+                    CPF = table.Column<string>(type: "char(11)", maxLength: 11, nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: true),
                     FirebaseUserId = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
@@ -60,10 +60,10 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_UserRoles", x => new { x.RoleId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
+                        name: "FK_UserRoles_Role_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "identity",
-                        principalTable: "Roles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -76,7 +76,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Roles",
+                table: "Role",
                 schema: "identity",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -97,7 +97,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                         "gestor1@esperancasolidaria.com",
                         "12345678901",
                         "",
-                        "FLnHn6Zm73hUU57dG8w916oPOqg2"
+                        "OfiSFcHMB9OkyQNqqBS9xb01FVJ3"
                     },
                     {
                         new Guid("22222222-2222-2222-2222-222222222222"),
@@ -134,7 +134,7 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Migrations
                 schema: "identity");
 
             migrationBuilder.DropTable(
-                name: "Roles",
+                name: "Role",
                 schema: "identity");
 
             migrationBuilder.DropTable(
