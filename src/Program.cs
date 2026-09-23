@@ -6,6 +6,7 @@ using FiapEsperancaSolidaria.Usuario.Infrastructure.Configurations;
 using FiapEsperancaSolidaria.Usuario.Infrastructure.Correlation;
 using FiapEsperancaSolidaria.Usuario.Shared.Abstractions;
 using FiapEsperancaSolidaria.Usuario.Queue.Configurations;
+using FiapEsperancaSolidaria.Usuario.Observability.Configurations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddAuthenticationConfig(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddScoped<ICorrelationIdAccessor, CorrelationIdAccessor>();
 
 builder.Host.AddSerilogConfig();
 
@@ -28,7 +27,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddQueueConfig(builder.Configuration);
 
-//builder.Services.AddObservabilityConfig();
+builder.Services.AddObservability(builder.Configuration);
 
 builder.Services.AddApiConfig(builder.Configuration);
 
@@ -44,6 +43,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapOpenApiConfiguration();
+app.MapObservabilityEndpoints();
 
 app.MapHealthCheckEndpoints();
 

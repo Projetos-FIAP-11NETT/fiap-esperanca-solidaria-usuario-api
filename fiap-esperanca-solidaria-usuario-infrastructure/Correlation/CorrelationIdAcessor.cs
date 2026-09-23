@@ -8,6 +8,8 @@ namespace FiapEsperancaSolidaria.Usuario.Infrastructure.Correlation;
 
 public sealed class CorrelationIdAccessor : ICorrelationIdAccessor
 {
+    public const string HeaderName = "X-Correlation-Id";
+
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CorrelationIdAccessor(IHttpContextAccessor httpContextAccessor)
@@ -15,8 +17,7 @@ public sealed class CorrelationIdAccessor : ICorrelationIdAccessor
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid CorrelationId =>
-        Guid.TryParse(_httpContextAccessor.HttpContext?.Items["X-Correlation-Id"]?.ToString(), out var correlationId)
-                ? correlationId
-                : Guid.NewGuid();
+    public string CorrelationId =>
+           _httpContextAccessor.HttpContext?.Items[HeaderName] as string ?? Guid.NewGuid().ToString();
+
 }
