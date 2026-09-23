@@ -20,7 +20,7 @@ public class User
     private User() { }
 
 
-    public User(string name, string email, string password, string cpf, string image, Role role)
+    public User(string name, string email, string password, string cpf, string? image, Role role)
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -57,14 +57,29 @@ public class User
         AddRole(role);
     }
 
+    public void UpdateProfile(string name, string email, string cpf, string? image)
+    {
+        Name = name;
+        Email = email;
+        CPF = cpf;
+        Image = image;
+
+        ValidateProfile();
+    }
+
     #region Validate for create user
 
     private void Validate()
     {
+        ValidateProfile();
+        ValidatePassword();
+    }
+
+    private void ValidateProfile()
+    {
         ValidateName();
         ValidateEmail();
         ValidateCPF();
-        ValidatePassword();
     }
 
     private void ValidateName()

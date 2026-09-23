@@ -13,12 +13,15 @@ public sealed record CreateUserCommand : IRequest<bool>
     [SensitiveData]
     public string Password { get; init; }
 
-    public CreateUserCommand(string name, string email, string password, string cpf, string image)
+    public bool IsGestorONG { get; init; }
+
+    public CreateUserCommand(string name, string email, string password, string cpf, string? image, bool isGestorONG)
     {
         Name = name;
         Email = email;
         Password = password;
         Cpf = cpf;
         Image = image;
+        IsGestorONG = isGestorONG;
     }
 }

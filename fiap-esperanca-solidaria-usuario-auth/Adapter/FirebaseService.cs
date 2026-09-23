@@ -32,6 +32,20 @@ public class FirebaseService(
         return userRecord.Uid;
     }
 
+    public async Task UpdateUserAsync(string firebaseUserId, string email, string name)
+    {
+        var args = new UserRecordArgs
+        {
+            Uid = firebaseUserId,
+            Email = email,
+            DisplayName = name
+        };
+
+        await FirebaseAuth
+            .DefaultInstance
+            .UpdateUserAsync(args);
+    }
+
     public async Task SetUserRoleAsync(string firebaseUserId, IEnumerable<string> roles, Guid? userId)
     {
         var claims = new Dictionary<string, object>

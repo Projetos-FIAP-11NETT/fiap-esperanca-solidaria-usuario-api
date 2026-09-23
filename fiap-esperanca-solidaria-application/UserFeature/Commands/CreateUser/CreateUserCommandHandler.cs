@@ -25,7 +25,10 @@ public class CreateUserCommandHandler
         if (emailAlreadyExists)
             throw new BusinessException("Esse e-mail já está cadastrado");
 
-        var role = await roleRepository.FindDoadorRoleAsync();
+        var role = command.IsGestorONG
+            ? await roleRepository.FindGestorRoleAsync()
+            : await roleRepository.FindDoadorRoleAsync();
+
         if (role is null)
             throw new NotFoundException("Perfil de usuário não encontrado");
 
@@ -44,7 +47,7 @@ public class CreateUserCommandHandler
         //{
         //    try
         //    {
-        //        await emailNotificationPublisher.PublishAsync(user.Email, "Bem-vindo ao FiapCloudGames!", $"Olá {user.Name}, bem-vindo ao FiapCloudGames😎! Acesse a nossa biblioteca com os nossos novos jogos de sucesso!!");
+        //        await emailNotificationPublisher.PublishAsync(user.Email, "Bem-vindo ao Esperança Solidária!", $"Olá {user.Name}, bem-vindo ao Esperança Solidária!");
         //    }
         //    catch (Exception ex)
         //    {
