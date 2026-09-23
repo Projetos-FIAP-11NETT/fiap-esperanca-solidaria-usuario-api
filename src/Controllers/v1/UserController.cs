@@ -2,7 +2,9 @@
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.CreateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.LogoutSession;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.MakeGestorONG;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.UpdateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Queries.GetSession;
+using FiapEsperancaSolidaria.Usuario.Contracts.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +16,81 @@ namespace FiapEsperancaSolidaria.Usuario.Controllers.v1;
 
 public class UserController(IMediator mediator) : ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateUserCommand command)
+    [HttpPost("Doador")]
+    public async Task<IActionResult> CreateDoadorAsync([FromBody] CreateUserRequest request)
     {
+        var command = new CreateUserCommand(
+            request.Name,
+            request.Email,
+            request.Password,
+            request.Cpf,
+            request.Image,
+            isGestorONG: false);
+
         var result = await mediator.Send(command);
 
         if (result)
             return Created();
+
+        return BadRequest();
+    }
+
+    [HttpPost("GestorONG")]
+    [Authorize(Roles = "GestorONG")]
+    public async Task<IActionResult> CreateGestorONGAsync([FromBody] CreateUserRequest request)
+    {
+        var command = new CreateUserCommand(
+            request.Name,
+            request.Email,
+            request.Password,
+            request.Cpf,
+            request.Image,
+            isGestorONG: true);
+
+        var result = await mediator.Send(command);
+
+        if (result)
+            return Created();
+
+        return BadRequest();
+    }
+
+    [HttpPut("Doador/{userId:guid}")]
+    [Authorize(Roles = "Doador")]
+    public async Task<IActionResult> UpdateDoadorAsync([FromRoute] Guid userId, [FromBody] UpdateUserRequest request)
+    {
+        var command = new UpdateUserCommand(
+            userId,
+            request.Name,
+            request.Email,
+            request.Cpf,
+            request.Image,
+            IsGestorONG: false);
+
+        var result = await mediator.Send(command);
+
+        if (result)
+            return NoContent();
+
+        return BadRequest();
+    }
+
+    [HttpPut("GestorONG/{userId:guid}")]
+    [Authorize(Roles = "GestorONG")]
+    public async Task<IActionResult> UpdateGestorONGAsync([FromRoute] Guid userId, [FromBody] UpdateUserRequest request)
+    {
+        var command = new UpdateUserCommand(
+            userId,
+            request.Name,
+            request.Email,
+            request.Cpf,
+            request.Image,
+            IsGestorONG: true);
+
+        var result = await mediator.Send(command);
+
+        if (result)
+            return NoContent();
 
         return BadRequest();
     }

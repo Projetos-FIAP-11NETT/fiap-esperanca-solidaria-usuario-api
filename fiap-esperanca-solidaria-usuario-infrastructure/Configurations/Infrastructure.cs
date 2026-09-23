@@ -1,8 +1,10 @@
 ﻿using FiapEsperancaSolidaria.Usuario.Application.Sessions;
 using FiapEsperancaSolidaria.Usuario.Domain.Contracts.Repositories;
 using FiapEsperancaSolidaria.Usuario.Infrastructure.Cache;
+using FiapEsperancaSolidaria.Usuario.Infrastructure.CurrentUser;
 using FiapEsperancaSolidaria.Usuario.Infrastructure.Data;
 using FiapEsperancaSolidaria.Usuario.Infrastructure.Repositories;
+using FiapEsperancaSolidaria.Usuario.Shared.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,7 @@ public static class Infrastructure
         });
 
         services.AddScoped<ISessionCacheService, RedisSessionCacheService>();
+        services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         return services;

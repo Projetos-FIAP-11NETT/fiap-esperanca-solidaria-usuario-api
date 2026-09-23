@@ -91,6 +91,11 @@ namespace FiapEsperancaSolidaria.Usuario.Middlewares
                     message = be.Message;
                     break;
 
+                case ForbiddenException fe:
+                    statusCode = StatusCodes.Status403Forbidden;
+                    message = fe.Message;
+                    break;
+
                 case KeyNotFoundException _:
                     statusCode = (int)HttpStatusCode.NotFound;
                     message = "Recurso não encontrado.";

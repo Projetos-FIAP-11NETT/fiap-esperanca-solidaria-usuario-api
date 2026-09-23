@@ -30,4 +30,13 @@ public class UserRepository
 
         return user;
     }
+
+    public async Task<User?> GetByIdWithRolesAsync(Guid id)
+    {
+        var user = await _dataContext.Users
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(s => s.Id == id);
+
+        return user;
+    }
 }

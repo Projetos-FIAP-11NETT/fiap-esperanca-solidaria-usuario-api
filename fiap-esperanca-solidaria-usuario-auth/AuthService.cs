@@ -28,6 +28,22 @@ public sealed class AuthService
         await client.SetUserRoleAsync(firebaseUserId, roles, idUser);
     }
 
+    public async Task UpdateUserAsync(string firebaseUserId, string email, string name)
+    {
+        try
+        {
+            await client.UpdateUserAsync(firebaseUserId, email, name);
+        }
+        catch (FirebaseAuthException ex)
+        {
+            throw FirebaseExceptionMapper.Map(ex);
+        }
+        catch (FirebaseException ex)
+        {
+            throw new ExternalException("Firebase", ex.Message);
+        }
+    }
+
     public async Task<LoginResponse> LoginUserAsync(string email, string password)
     {
         try
