@@ -9,5 +9,6 @@
   <Project Path="../fiap-esperanca-solidaria-usuario-observability/FiapEsperancaSolidaria.Usuario.Observability.csproj" Id="56016c37-8a80-48e2-a290-81fb5401f427" />
   <Project Path="../fiap-esperanca-solidaria-usuario-shared/FiapEsperancaSolidaria.Usuario.Shared.csproj" Id="c5ef30dc-f90a-4702-814a-5ae96e68595c" />
   <Project Path="../FiapEsperancaSolidaria.Usuario.Queue/FiapEsperancaSolidaria.Usuario.Queue.csproj" Id="e993f667-9ea5-400d-83d8-dc3f20c3f3b9" />
+  <Project Path="../FiapEsperancaSolidaria.Usuario.Teste/FiapEsperancaSolidaria.Usuario.Teste.csproj" Id="1c013b1b-2980-4913-b72f-79abc99342d4" />
   <Project Path="FiapEsperancaSolidaria.Usuario.Api.csproj" />
 </Solution>
