@@ -4,6 +4,7 @@ using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.LogoutSess
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.MakeGestorONG;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.RefreshToken;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.UpdateUser;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.UploadUserImage;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Queries.GetSession;
 using FiapEsperancaSolidaria.Usuario.Contracts.Requests;
 using MediatR;
@@ -94,6 +95,34 @@ public class UserController(IMediator mediator) : ControllerBase
             return NoContent();
 
         return BadRequest();
+    }
+
+    /// <summary>Sobe uma foto de perfil pro S3 (LocalStack em dev) e devolve a URL pública.</summary>
+    /// <remarks>
+    /// Anônimo de propósito: no cadastro (POST /User/Doador ou /User/GestorONG) ainda não
+    /// existe conta pra autenticar contra — o front sobe a imagem primeiro e manda a URL de
+    /// volta como o campo Image do cadastro, igual ao fluxo de imagem de campanha na
+    /// campanha-api (lá autenticado, aqui não tem como). Mitigação: só tamanho (5 MB) e
+    /// content-type de imagem, sem outra validação.
+    /// </remarks>
+    [HttpPost("images")]
+    [AllowAnonymous]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(5_000_000)]
+    public async Task<IActionResult> UploadImageAsync(IFormFile file, CancellationToken cancellationToken)
+    {
+        if (file is null || file.Length == 0)
+            return BadRequest(new { error = "Arquivo vazio." });
+
+        if (string.IsNullOrWhiteSpace(file.ContentType) || !file.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            return BadRequest(new { error = "Arquivo precisa ser uma imagem." });
+
+        await using var stream = file.OpenReadStream();
+        var result = await mediator.Send(
+            new UploadUserImageCommand(stream, file.FileName, file.ContentType),
+            cancellationToken);
+
+        return Ok(result);
     }
 
     [HttpPost("Login")]
