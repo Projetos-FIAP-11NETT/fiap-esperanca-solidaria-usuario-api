@@ -122,4 +122,35 @@ public class FirebaseService(
             Email = emailUser
         };
     }
+
+    public async Task<LoginResponse> RefreshTokenAsync(string refreshToken)
+    {
+        var payload = new Dictionary<string, string>
+        {
+            { "grant_type", "refresh_token" },
+            { "refresh_token", refreshToken }
+        };
+
+        var response = await httpClient.PostAsync(
+            $"https://securetoken.googleapis.com/v1/token?key={_firebaseOptions.ApiKey}",
+            new FormUrlEncodedContent(payload)
+        );
+
+        if (!response.IsSuccessStatusCode)
+            throw new UnauthorizedAccessException("Refresh token inválido");
+
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+
+        var idToken = doc.RootElement.GetProperty("id_token").GetString();
+        var newRefreshToken = doc.RootElement.GetProperty("refresh_token").GetString();
+        var expiresIn = int.Parse(doc.RootElement.GetProperty("expires_in").GetString());
+
+        return new LoginResponse
+        {
+            IdToken = idToken,
+            RefreshToken = newRefreshToken,
+            ExpiresIn = expiresIn
+        };
+    }
 }

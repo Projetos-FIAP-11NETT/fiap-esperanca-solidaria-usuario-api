@@ -2,6 +2,7 @@ using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.AuthUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.CreateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.LogoutSession;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.MakeGestorONG;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.RefreshToken;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.UpdateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Queries.GetSession;
 using FiapEsperancaSolidaria.Usuario.Contract.Dto.Response;
@@ -145,6 +146,41 @@ public class UserControllerTests
         var controller = new UserController(mediator);
 
         var result = await controller.LoginAsync(new LoginUserCommand("maria.doador@email.com", "Senha@123"));
+
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public async Task RefreshTokenAsync_WhenTokenExists_ReturnsOkWithLoginResponse()
+    {
+        var response = new LoginResponse
+        {
+            SessionId = Guid.NewGuid(),
+            IdToken = "new-token",
+            RefreshToken = "new-refresh",
+            ExpiresIn = 3600,
+            Email = "maria@email.com"
+        };
+        var mediator = new FakeMediator();
+        mediator.SetResponse(response);
+        var controller = new UserController(mediator);
+        var command = new RefreshTokenCommand(response.SessionId, "refresh");
+
+        var result = await controller.RefreshTokenAsync(command);
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Same(response, okResult.Value);
+        Assert.Same(command, mediator.LastRequest);
+    }
+
+    [Fact]
+    public async Task RefreshTokenAsync_WhenTokenIsNull_ReturnsUnauthorized()
+    {
+        var mediator = new FakeMediator();
+        mediator.SetResponse(new LoginResponse());
+        var controller = new UserController(mediator);
+
+        var result = await controller.RefreshTokenAsync(new RefreshTokenCommand(Guid.NewGuid(), "refresh"));
 
         Assert.IsType<UnauthorizedResult>(result);
     }

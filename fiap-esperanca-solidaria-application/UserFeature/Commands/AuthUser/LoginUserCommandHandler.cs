@@ -21,8 +21,9 @@ public class LoginUserCommandHandler
     {
         var responseToken = await AuthUserInFirebase(command);
         var sessionId = Guid.NewGuid();
-        var expiration = TimeSpan.FromSeconds(responseToken.ExpiresIn);
         var now = DateTimeOffset.UtcNow;
+        var tokenExpiresAt = now.AddSeconds(responseToken.ExpiresIn);
+        var sessionExpiresAt = now.Add(SessionLifetime.Duration);
 
         await sessionCacheService.StoreAsync(
             new SessionCacheEntry
@@ -32,9 +33,11 @@ public class LoginUserCommandHandler
                 IdToken = responseToken.IdToken,
                 RefreshToken = responseToken.RefreshToken,
                 CreatedAt = now,
-                ExpiresAt = now.Add(expiration)
+                ExpiresAt = sessionExpiresAt,
+                TokenExpiresAt = tokenExpiresAt,
+                SessionExpiresAt = sessionExpiresAt
             },
-            expiration,
+            SessionLifetime.Duration,
             cancellationToken);
 
         logger.LogInformation("Session {SessionId} stored in distributed cache for user {Email}", sessionId, responseToken.Email);

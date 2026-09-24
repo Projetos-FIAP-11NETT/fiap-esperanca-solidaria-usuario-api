@@ -22,7 +22,9 @@ public sealed class GetSessionQueryHandler(ISessionCacheService sessionCacheServ
             SessionId = session.SessionId,
             Email = session.Email,
             CreatedAt = session.CreatedAt,
-            ExpiresAt = session.ExpiresAt
+            ExpiresAt = session.ExpiresAt,
+            TokenExpiresAt = session.TokenExpiresAt,
+            SessionExpiresAt = session.SessionExpiresAt
         };
     }
 }

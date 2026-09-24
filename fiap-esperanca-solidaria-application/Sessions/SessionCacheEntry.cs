@@ -8,4 +8,6 @@ public sealed class SessionCacheEntry
     public string RefreshToken { get; set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset ExpiresAt { get; set; }
+    public DateTimeOffset TokenExpiresAt { get; set; }
+    public DateTimeOffset SessionExpiresAt { get; set; }
 }
