@@ -2,6 +2,7 @@
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.CreateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.LogoutSession;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.MakeGestorONG;
+using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.RefreshToken;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Commands.UpdateUser;
 using FiapEsperancaSolidaria.Usuario.Application.UserFeature.Queries.GetSession;
 using FiapEsperancaSolidaria.Usuario.Contracts.Requests;
@@ -100,7 +101,18 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command);
 
-        if (result.IdToken != null)
+        if (!string.IsNullOrWhiteSpace(result.IdToken))
+            return Ok(result);
+
+        return Unauthorized();
+    }
+
+    [HttpPost("RefreshToken")]
+    public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenCommand command)
+    {
+        var result = await mediator.Send(command);
+
+        if (!string.IsNullOrWhiteSpace(result.IdToken))
             return Ok(result);
 
         return Unauthorized();

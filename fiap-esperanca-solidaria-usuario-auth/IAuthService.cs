@@ -11,4 +11,6 @@ public interface IAuthService
     Task SetUserRoleAsync(string firebaseUserId, IEnumerable<string> roles, Guid idUser);
 
     Task<LoginResponse> LoginUserAsync(string email, string password);
+
+    Task<LoginResponse> RefreshTokenAsync(string refreshToken);
 }

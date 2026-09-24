@@ -5,4 +5,6 @@ public class SessionResponse
     public string Email { get; set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset ExpiresAt { get; set; }
+    public DateTimeOffset TokenExpiresAt { get; set; }
+    public DateTimeOffset SessionExpiresAt { get; set; }
 }

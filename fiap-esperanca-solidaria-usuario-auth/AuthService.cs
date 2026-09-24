@@ -59,4 +59,20 @@ public sealed class AuthService
             throw new ExternalException("Firebase", ex.Message);
         }
     }
+
+    public async Task<LoginResponse> RefreshTokenAsync(string refreshToken)
+    {
+        try
+        {
+            return await client.RefreshTokenAsync(refreshToken);
+        }
+        catch (FirebaseAuthException ex)
+        {
+            throw FirebaseExceptionMapper.Map(ex);
+        }
+        catch (FirebaseException ex)
+        {
+            throw new ExternalException("Firebase", ex.Message);
+        }
+    }
 }
