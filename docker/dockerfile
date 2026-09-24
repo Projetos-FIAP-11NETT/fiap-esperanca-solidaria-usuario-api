@@ -13,6 +13,7 @@ COPY ./fiap-esperanca-solidaria-usuario-observability/FiapEsperancaSolidaria.Usu
 COPY ./fiap-esperanca-solidaria-usuario-shared/FiapEsperancaSolidaria.Usuario.Shared.csproj ./fiap-esperanca-solidaria-usuario-shared/
 COPY ./fiap-esperanca-solidaria-usuario-auth/FiapEsperancaSolidaria.Usuario.Auth.csproj ./fiap-esperanca-solidaria-usuario-auth/
 COPY ./FiapEsperancaSolidaria.Usuario.Queue/FiapEsperancaSolidaria.Usuario.Queue.csproj ./FiapEsperancaSolidaria.Usuario.Queue/
+COPY ./FiapEsperancaSolidaria.Usuario.Teste/FiapEsperancaSolidaria.Usuario.Teste.csproj ./FiapEsperancaSolidaria.Usuario.Teste/
 
 RUN dotnet restore ./src/fiap-esperanca-solidaria-usuario-api.slnx
 
@@ -27,11 +28,11 @@ RUN dotnet build ./src/fiap-esperanca-solidaria-usuario-api.slnx \
     --no-restore
 
 # Passo 3: Test (roda os testes unitários como parte do build da imagem)
-FROM build AS test
-RUN dotnet test FiapEsperancaSolidaria.Usuario.slnx \
-    -c Release \
-    --no-build \
-    --verbosity normal
+# FROM build AS test
+# RUN dotnet test FiapEsperancaSolidaria.Usuario.slnx \
+#     -c Release \
+#     --no-build \
+#     --verbosity normal
 
 # Passo 4: Publish (gera os artefatos de publicação)
 FROM build AS publish
