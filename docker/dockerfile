@@ -14,7 +14,11 @@ COPY ./fiap-esperanca-solidaria-usuario-shared/FiapEsperancaSolidaria.Usuario.Sh
 COPY ./fiap-esperanca-solidaria-usuario-auth/FiapEsperancaSolidaria.Usuario.Auth.csproj ./fiap-esperanca-solidaria-usuario-auth/
 COPY ./FiapEsperancaSolidaria.Usuario.Queue/FiapEsperancaSolidaria.Usuario.Queue.csproj ./FiapEsperancaSolidaria.Usuario.Queue/
 
-RUN dotnet restore ./src/fiap-esperanca-solidaria-usuario-api.slnx
+# Restaura só o projeto da API (não a .slnx inteira): a .slnx também lista o
+# FiapEsperancaSolidaria.Usuario.Teste, cujo .csproj não está copiado acima —
+# "dotnet restore" na solution inteira falha por causa disso. A imagem de runtime
+# não precisa do projeto de testes de qualquer forma.
+RUN dotnet restore ./src/FiapEsperancaSolidaria.Usuario.Api.csproj
 
 # Passo 2: Build (copia o restante do código e compila, reaproveitando o cache do restore)
 FROM restore AS build
@@ -22,7 +26,7 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet build ./src/fiap-esperanca-solidaria-usuario-api.slnx \
+RUN dotnet build ./src/FiapEsperancaSolidaria.Usuario.Api.csproj \
     -c Release \
     --no-restore
 
