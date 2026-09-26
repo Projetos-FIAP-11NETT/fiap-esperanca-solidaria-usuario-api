@@ -35,7 +35,10 @@ var app = builder.Build();
 
 app.UseApiConfig();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Kubernetes"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
