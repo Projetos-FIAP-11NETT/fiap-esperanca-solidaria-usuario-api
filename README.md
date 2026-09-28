@@ -3,7 +3,7 @@
 API de **usuários, autenticação e sessão** da plataforma Esperança Solidária (FIAP 11NETT). Cadastra
 doadores e gestores de ONG no Firebase Authentication e no PostgreSQL, faz login/refresh de token, mantém
 a sessão no Redis e tem um publisher de e-mail para a fila SQS consumida pela `notificacao-lambda`
-(hoje desligado — ver [Pendências](#pendências)).
+(hoje desligado no código).
 
 > Para subir o ambiente completo (k8s, LocalStack, API Gateway, front), siga o README do repositório
 > **`fiap-esperanca-solidaria-infra`**. Este documento cobre a API isoladamente.
@@ -22,7 +22,6 @@ a sessão no Redis e tem um publisher de e-mail para a fila SQS consumida pela `
 - [Testes](#testes)
 - [CI/CD](#cicd)
 - [Troubleshooting](#troubleshooting)
-- [Pendências](#pendências)
 
 ---
 
@@ -241,13 +240,4 @@ dotnet test src/fiap-esperanca-solidaria-usuario-api.slnx
 | `403` na campanha-api/gateway após login | Usuário sem claim `roles` (usuários antigos/seed). Recadastre ou promova e faça login de novo. |
 | Sessão some antes do esperado | Sessão expira 1 h após o login/último refresh; use `RefreshToken` para renovar. |
 | Upload de foto devolve URL inacessível | Ajuste `S3Settings:PublicBaseUrl` para um host resolvível pelo navegador. |
-| E-mail de boas-vindas não chega | Esperado hoje: a publicação está comentada (ver Pendências). Com ela ativa, confira a fila `notification-queue` e a `notificacao-lambda` (o LocalStack só simula o SES). |
-
----
-
-## Pendências
-
-- A chamada `emailNotificationPublisher.PublishAsync(...)` em
-  `UserFeature/Commands/CreateUser/CreateUserCommandHandler.cs` está comentada: nenhum e-mail de
-  boas-vindas é publicado na `notification-queue` hoje, embora o publisher e a Lambda estejam prontos.
-- `k8s/users-api/users-deployment.yaml` (infra) não define `Cors__AllowedOrigins__0`.
+| E-mail de boas-vindas não chega | Esperado hoje: a publicação está comentada no `CreateUserCommandHandler`. Com ela ativa, confira a fila `notification-queue` e a `notificacao-lambda` (o LocalStack só simula o SES). |
